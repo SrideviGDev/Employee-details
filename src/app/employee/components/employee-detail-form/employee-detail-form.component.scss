@@ -1,0 +1,84 @@
+
+
+.datepicker-container {
+  position: relative;
+  display: inline-block;
+}
+
+
+/* Global styles for header */
+header {
+  background-color: #1DA1F2; /* Example background color */
+  color: #fff; /* Example text color */
+  // padding: 10px 20px;
+}
+
+/* Title styles */
+.header-title {
+  margin: 0;
+  font-size: 24px; /* Example font size */
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.arrow {
+  padding: 19px 33px 19px 33px;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.date-input {
+  width: 255px;
+}
+
+// .employee-form {
+//   width: 100%;
+//   max-width: 600px;
+//   display: grid;
+//   // grid-template-columns: 1fr;
+//   gap: 0rem;
+// }
+
+.responsive-form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+
+.select {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+
+}
+
+.input-class{
+  padding: 15px;
+  height: 0px !important;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.mat-select-panel {
+  top: unset !important; /* Adjust top positioning as needed */
+}
+
+.footer {
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: end;
+  gap: 20px;
+  padding-top: 20px;
+  height: 50px;
+  overflow: hidden;
+}
+
+

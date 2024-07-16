@@ -1,0 +1,55 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+.theme-color {
+  color: #1DA1F2;
+
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  padding-left: 10px;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  height: 60px;
+  background-color: #1DA1F2;
+  color: #fff;
+  font-family: 'Roboto';
+}
+
+/* Smartphones (portrait and landscape) */
+@media (max-width: 600px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    font-size: 1.2rem;
+  }
+}
+
+/* Tablets */
+@media (min-width: 600px) and (max-width: 768px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header {
+    font-size: 1.5rem;
+  }
+}
+
+/* Desktops */
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .header {
+    font-size: 2rem;
+  }
+}
+
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';

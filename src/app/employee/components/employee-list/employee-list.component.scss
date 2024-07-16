@@ -1,0 +1,82 @@
+
+
+
+
+.swipe-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+   
+  .item-content {
+    flex: 1;
+    padding: 16px;
+    transition: transform 0.3s ease;
+  }
+   
+  .delete-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    color: #fff;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    opacity: 0;
+  }
+   
+  .delete-button {
+    right: 0;
+    background-color: #f44336; /* Red */
+  }
+
+  .icon_right {
+    margin-right: 0px !important;
+  }
+
+  .fab_btn {
+    background-color: #1DA1F2;
+    position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  }
+
+  .list_item{
+    border-bottom: 1px solid #ccc;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    height: 70px !important;
+  }
+
+  .card_header{
+    padding: 15px !important;
+    background-color: #E6E6E6 !important;
+    color:#1DA1F2;
+  }
+
+  .d-flex {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .emp_role{
+    margin: 0px;
+    color:#ccc;
+    font-size: 14px;
+  }
+
+  .emp_period{
+    margin: 0px;
+    color:#ccc;
+    font-size: 11px;
+  }
+
+  .m-0{
+    margin: 0px;
+  }

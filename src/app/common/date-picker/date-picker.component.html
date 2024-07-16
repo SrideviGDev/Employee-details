@@ -1,0 +1,44 @@
+
+
+<div class="calendar-dialog">
+<div class="calendar" *ngIf="data.calendarVisible">
+       
+          <div class="custom-buttons">
+            <button *ngIf="!data.toDate" [ngClass]="{'selected': selectedButton === 'noDate'}" (click)="setNoDate()">No Date</button>
+        <button [ngClass]="{'selected': selectedButton === 'today'}" (click)="setToday()">Today</button>
+          <button *ngIf="data.toDate" [ngClass]="{'selected': selectedButton === 'nextMonday'}" (click)="setNextMonday()">Next Monday</button>
+        </div>
+        <div *ngIf="data.toDate" class="custom-buttons">
+          <button [ngClass]="{'selected': selectedButton === 'nextTuesday'}" (click)="setNextTuesday()">Next Tuesday</button>
+          <button [ngClass]="{'selected': selectedButton === 'afterOneWeek'}" (click)="setAfterOneWeek()">After One Week</button>
+        </div>
+        <!-- <mat-calendar #calendar></mat-calendar> -->
+        <div class="calendar-header">
+          <mat-icon (click)="prevMonth()">arrow_left</mat-icon>
+          <span>{{ months[viewDate.getMonth()] }} {{ viewDate.getFullYear() }}</span>
+          <mat-icon (click)="nextMonth()">arrow_right</mat-icon>
+        </div>
+        <div class="calendar-body">
+          <div class="calendar-day-names">
+            <div *ngFor="let day of dayNames">{{ day }}</div>
+          </div>
+          <div class="calendar-days">
+            <div *ngFor="let day of getCalendarDays()" (click)="!isDisabled(day) ? selectDate(day) : null" [class.selected]="isSelected(day)" [class.disabled]="isDisabled(day)">
+              {{ day?.getDate() }}
+            </div>
+          </div>
+        </div>
+        <div class="calendar-bottom">
+        <div *ngIf="selectedDate" class="selected-date">
+          <mat-icon>today</mat-icon>
+          <span>{{ selectedDate | date }} </span>
+      </div>
+      <div class="selected-date" *ngIf="selectedButton == 'noDate'">No Date</div>
+        <div class="actions">
+        <button mat-button class="cancel" (click)="onCancel()">Cancel</button>
+        <button mat-button class="save" (click)="onSave()">Save</button>
+      </div>
+        </div>
+      
+      </div>
+    </div>

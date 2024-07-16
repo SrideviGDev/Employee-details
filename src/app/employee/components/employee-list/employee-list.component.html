@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="header">
+        <span>Employee List</span>
+    </div>
+    <div *ngIf="currentEmployees().length" class="card">
+      <div class="card_header">
+        <mat-card-title>Current Employees</mat-card-title>
+      </div>
+    <mat-list role="list">
+      <mat-list-item role="listitem" class="list_item" *ngFor="let employee of currentEmployees()">
+        <div class="d-flex" (mousedown)="onMouseDown($event, employee)" (touchstart)="onTouchStart($event, employee)">
+          <div>
+            <p class="m-0"><strong>{{ employee['name'] }}</strong></p>
+            <p class="emp_role">{{ employee['position'] }}</p>
+            <p class="emp_period">From {{ employee['fromDate'] }}</p>
+        </div>
+        <button mat-icon-button (click)="editEmployee(employee)">
+          <mat-icon theme-color>edit</mat-icon>
+        </button>
+        </div>
+        <div class="delete-button" [id]="employee['id']">
+          <mat-icon>delete</mat-icon>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <div *ngIf="previousEmployees().length" class="card">
+    <div class="card_header">
+      <mat-card-title>Previous Employees</mat-card-title>
+    </div>
+    <mat-list role="list">
+      <mat-list-item role="listitem" class="list_item" *ngFor="let employee of previousEmployees()">
+        <div class="d-flex" (mousedown)="onMouseDown($event, employee)" (touchstart)="onTouchStart($event, employee)">
+          <div>
+            <p class="m-0"><strong>{{ employee['name'] }}</strong></p>
+            <p class="emp_role">{{ employee['position'] }}</p>
+            <p class="emp_period">{{ employee['fromDate'] }} - {{ employee['toDate']}}</p>
+          </div>
+          <button mat-icon-button (click)="editEmployee(employee)">
+            <mat-icon theme-color>edit</mat-icon>
+          </button>
+        </div>
+        <div class="delete-button" [id]="employee['id']">
+          <mat-icon>delete</mat-icon>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+
+
+<button (click)="toAddNewEmployee()" class="fab_btn" mat-fab>
+  <mat-icon class="icon_right">add</mat-icon>
+</button>
+
+
+

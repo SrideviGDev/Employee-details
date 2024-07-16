@@ -1,0 +1,116 @@
+.calendar-dialog {
+  padding: 8px;
+  border-radius: 4px;
+  width: 396px;
+
+  .custom-buttons {
+    display: flex;
+    gap: 10px 20px;
+    padding: 10px;
+    button {
+      width: 174px;
+      height: 36px;
+      background-color: #EDF8FF;
+      color: #1DA1F2;
+      border: none;
+    }
+    button.selected {
+      background-color: #1DA1F2 !important;
+      color: #fff !important;
+    }
+  }
+
+  .calendar-header {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    align-items: center;
+  }
+
+  // .calendar-body {
+
+  //   .calendar-day-names,
+  //   .calendar-days {
+  //     display: flex;
+  //     flex-wrap: wrap;
+  //   }
+
+    .calendar-days {
+  //     div {
+  //       flex: 1 0 14%;
+  //       /* Adjust the width of each day */
+  //       text-align: center;
+  //       padding: 5px;
+  //       cursor: pointer;
+  //     }
+
+      .selected {
+        background-color: #007bff;
+        color: white;
+        border-radius: 32px;
+      }
+
+      .selected:hover {
+        background-color: #007bff;
+        color: white;
+      }
+
+      .disabled {
+        color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  // }
+
+  .calendar-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .calendar-day-names, .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  
+  .calendar-day-names div, .calendar-days div {
+    text-align: center;
+    padding: 15px;
+  }
+
+  
+.calendar-days div:hover {
+  background: #f1f1f1;
+  cursor: pointer;
+}
+
+  .calendar-bottom {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 9px;
+    height: 55px;
+    border-top: 1px solid #ccc;
+  }
+
+  .selected-date {
+    flex-grow: 1;
+    justify-content: flex-start;
+    display: flex;
+    gap: 10px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    button.save {
+      background-color: #1DA1F2 !important;
+      color: #fff !important;
+    }
+  }
+}
+
+
+.disabled {
+  background: #f1f1f1 !important;
+  cursor: not-allowed !important;
+}
