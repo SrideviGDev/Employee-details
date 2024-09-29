@@ -4,7 +4,8 @@ import {  MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 export interface DatePickerInput {
   calendarVisible: boolean;
   toDate: boolean;
-  minDate: Date
+  minDate: Date,
+  pickedDate: Date
 }
 
 @Component({
@@ -18,7 +19,7 @@ export interface DatePickerInput {
 export class DatePickerComponent {
   viewDate = new Date();
   selectedDate: Date | null = null;
-  selectedButton: string;
+  selectedButton: string | null = null;
 
   dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   months = [
@@ -37,7 +38,8 @@ export class DatePickerComponent {
   ];
 
   constructor(public dialogRef: MatDialogRef<DatePickerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DatePickerInput) {}
+    @Inject(MAT_DIALOG_DATA) public data: DatePickerInput) {
+    }
 
   prevMonth() {
     this.viewDate.setMonth(this.viewDate.getMonth() - 1);
@@ -73,6 +75,7 @@ export class DatePickerComponent {
 
   selectDate(date: any) {
     this.selectedDate = date?date:null;
+    this.selectedButton = null;
   }
 
   private setRelativeDay(dayOfWeek: number) {
@@ -120,7 +123,7 @@ export class DatePickerComponent {
   }
 
   isDisabled(day: any): boolean {
-    return day < new Date(this.data.minDate) || day > new Date();
+    return day < new Date(this.data.minDate);
   }
 
 
@@ -131,12 +134,12 @@ export class DatePickerComponent {
 
   onCancel() {
     // Handle cancel logic
-    this.selectedDate = null;
-    this.dialogRef.close();
+    // this.selectedDate = null;
+    this.dialogRef.close(this.data.pickedDate);
   }
 
   onSave() {
     // Handle save logic
-    this.dialogRef.close(this.selectedDate);
+      this.dialogRef.close(this.selectedDate);
   }
 }

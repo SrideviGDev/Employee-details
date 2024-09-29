@@ -1,4 +1,4 @@
-import { Component, computed, Input, OnInit, signal } from '@angular/core';
+import { Component, computed, ElementRef, Input, OnInit, Renderer2, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { Employee } from '../../employee-model';
@@ -19,13 +19,19 @@ export class EmployeeListComponent implements OnInit{
   employeeList = signal(this.employees);
   @Input() title: string;
   @Input() content: string;
+  private isSwiping: boolean = false
   startX!: number;
   currentItem!: HTMLElement;
   currentId: number;
   removedEmployee:any;
+  private currentX: number = 0;
+  private threshold: number = 100; // Threshold for detecting swipe completion
+  private swipeDistance: number = 0;
+  deletedBtnWidth = 0;
 
   constructor(private router: Router,private dbService: NgxIndexedDBService,
-          private employeeService: EmployeeService, private _snackBar: MatSnackBar){}
+          private employeeService: EmployeeService, private _snackBar: MatSnackBar,
+          private renderer: Renderer2, private el: ElementRef){}
 
   ngOnInit() {
     this.loadEmployees();
@@ -40,94 +46,109 @@ export class EmployeeListComponent implements OnInit{
   }
 
   previousEmployees = computed(() => {
-    return this.employeeList().filter((emp) => emp['toDate']!=null)
+    return this.employeeList().filter((emp) => (emp['toDate']!='No Date' && emp['toDate']!=null))
   })
 
   currentEmployees = computed(() => {
-   return this.employeeList().filter((emp) => !emp['toDate'])
+   return this.employeeList().filter((emp) => (emp['toDate']=='No Date' || !emp['toDate']))
   })
 
-    
-
-  onMouseDown(event: MouseEvent, employee: Employee) {
-    this.startX = event?.clientX;
-    this.currentItem = event?.target as HTMLElement;
+   // Handle Mouse Events
+   onMouseDown(event: MouseEvent, employee: Employee) {
     this.currentId = employee.id;
-    this.addMouseEvents();
-  }
-
-  onTouchStart(event: TouchEvent, employee: Employee) {
-    this.startX = event?.touches[0].clientX;
     this.currentItem = event?.target as HTMLElement;
-    this.currentId = employee['id'];
-    this.addTouchEvents();
+    this.startSwipe(event.clientX);
   }
 
-  addMouseEvents() {
-    window.addEventListener('mousemove', this.onMouseMove);
-    window.addEventListener('mouseup', this.onMouseUp);
-  }
-
-  addTouchEvents() {
-    window.addEventListener('touchmove', this.onTouchMove);
-    window.addEventListener('touchend', this.onTouchEnd);
-  }
-
-  onMouseMove = (event: MouseEvent) => {
-    const deltaX = event?.clientX - this.startX;
-    this.handleSwipe(deltaX);
-  };
-
-  onTouchMove = (event: TouchEvent) => {
-    const deltaX = event?.touches[0].clientX - this.startX;
-    this.handleSwipe(deltaX);
-  };
-
-  handleSwipe(deltaX: number) {
-    if (this.currentItem) {
-      this.currentItem.style.transform = `translateX(${deltaX}px)`;
-      this.showButtons(deltaX);
+  onMouseMove(event: MouseEvent) {
+    if (this.isSwiping) {
+      this.updateSwipe(event.clientX);
     }
   }
 
-  showButtons(deltaX: number) {
-    
+  onMouseUp(event: MouseEvent) {
+    if (this.isSwiping) {
+      this.endSwipe(event.clientX);
+    }
+  }
+
+  // Handle Touch Events
+  onTouchStart(event: TouchEvent, employee: Employee) {
+    this.currentId = employee.id;
+    this.currentItem = event?.target as HTMLElement;
+    this.startSwipe(event.touches[0].clientX);
+  }
+
+  onTouchMove(event: TouchEvent) {
+    if (this.isSwiping) {
+      this.updateSwipe(event.touches[0].clientX);
+    }
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    if (this.isSwiping) {
+      this.endSwipe(this.currentX);
+    }
+  }
+
+  // Initialize swipe
+  private startSwipe(startX: number) {
+    this.isSwiping = true;
+    this.startX = startX;
+  }
+
+  // Update the position during swipe
+  private updateSwipe(currentX: number) {
+    this.currentX = currentX;
+    this.swipeDistance = this.currentX - this.startX;
     const deleteButton = document.getElementById(''+this.currentId) as HTMLElement;
-    if(deleteButton) {
-    if (deltaX > 50) {
+    if(this.swipeDistance > 0) {
       deleteButton.style.opacity = '0';
       deleteButton.style.pointerEvents = 'none';
-    } else if (deltaX < -50) {
+    } else {
       deleteButton.style.opacity = '1';
       deleteButton.style.pointerEvents = 'auto';
-      setTimeout(() => {
-        this.deleteEmployee(this.currentId)
-      }, 700)
+      this.currentItem.style.transform = `translateX(${this.swipeDistance}px)`
+    }
+    // this.renderer.setStyle(this.el.nativeElement, 'transform', `translateX(${this.swipeDistance}px)`);
+  }
+
+
+  // End swipe and check if the swipe is complete
+  private endSwipe(endX: number) {
+    this.isSwiping = false;
+    this.swipeDistance = endX - this.startX;
+    if(this.swipeDistance < 0) {
+    // Check if swipe distance exceeds the threshold
+    if (Math.abs(this.swipeDistance) > this.threshold) {
+      this.handleSwipeComplete();
     } else {
-      deleteButton.style.opacity = '0';
-      deleteButton.style.pointerEvents = 'none';
+      this.resetSwipe();
     }
   }
   }
 
-  onMouseUp = () => {
-    this.resetItem();
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
-  };
-
-  onTouchEnd = () => {
-    this.resetItem();
-    window.removeEventListener('touchmove', this.onTouchMove);
-    window.removeEventListener('touchend', this.onTouchEnd);
-  };
-
-  resetItem() {
-    if (this.currentItem) {
-      this.currentItem.style.transform = 'translateX(0)';
-      this.showButtons(0);
-    }
+  // Reset swipe back to original position
+  private resetSwipe() {
+    const deleteButton = document.getElementById(''+this.currentId) as HTMLElement;
+    deleteButton.style.opacity = '0';
+    deleteButton.style.pointerEvents = 'none';
+    this.currentItem.style.transform = 'translateX(0px)';
   }
+
+  // Trigger when swipe completes
+  private handleSwipeComplete() {
+    this.deleteEmployee(this.currentId)
+    this.resetSwipe();  
+  }
+
+
+  // resetItem() {
+  //   if (this.currentItem) {
+  //     this.currentItem.style.transform = 'translateX(0)';
+  //     this.showButtons(0);
+  //   }
+  // }
 
   deleteEmployee(employeeId: number) {
     this.dbService.getByID('employees', employeeId).subscribe((employee) => {
@@ -142,8 +163,7 @@ export class EmployeeListComponent implements OnInit{
   }
 
   editEmployee(employee: Employee) {
-    this.employeeService.editEmployee(employee)
-    this.router.navigate(['/employee-detail'])
+    this.router.navigate(['/employee-detail', this.currentId])
   }
   
   toAddNewEmployee() {

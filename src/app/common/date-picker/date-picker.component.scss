@@ -7,6 +7,7 @@
     display: flex;
     gap: 10px 20px;
     padding: 10px;
+
     button {
       width: 174px;
       height: 36px;
@@ -14,6 +15,7 @@
       color: #1DA1F2;
       border: none;
     }
+
     button.selected {
       background-color: #1DA1F2 !important;
       color: #fff !important;
@@ -27,61 +29,55 @@
     align-items: center;
   }
 
-  // .calendar-body {
 
-  //   .calendar-day-names,
-  //   .calendar-days {
-  //     display: flex;
-  //     flex-wrap: wrap;
-  //   }
+  .calendar-days {
 
-    .calendar-days {
-  //     div {
-  //       flex: 1 0 14%;
-  //       /* Adjust the width of each day */
-  //       text-align: center;
-  //       padding: 5px;
-  //       cursor: pointer;
-  //     }
-
-      .selected {
-        background-color: #007bff;
-        color: white;
-        border-radius: 32px;
-      }
-
-      .selected:hover {
-        background-color: #007bff;
-        color: white;
-      }
-
-      .disabled {
-        color: #ccc;
-        cursor: not-allowed;
-      }
+    .selected {
+      background-color: #007bff;
+      color: white;
+      border-radius: 32px;
     }
-  // }
+
+    .selected:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .disabled {
+      color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+
 
   .calendar-body {
     display: flex;
     flex-direction: column;
-  }
-  
-  .calendar-day-names, .calendar-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-  }
-  
-  .calendar-day-names div, .calendar-days div {
-    text-align: center;
-    padding: 15px;
+    width: 100%; 
+    height: auto; 
+    overflow: hidden; 
   }
 
-  
-.calendar-days div:hover {
-  background: #f1f1f1;
-  cursor: pointer;
-}
+  .calendar-day-names,
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    flex: 1; 
+  box-sizing: border-box;
+  }
+
+  .calendar-day-names div,
+  .calendar-days div {
+    text-align: center;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+
+  .calendar-days div:hover {
+    background: #f1f1f1;
+    cursor: pointer;
+  }
 
   .calendar-bottom {
     display: flex;
@@ -102,6 +98,7 @@
   .actions {
     display: flex;
     gap: 10px;
+
     button.save {
       background-color: #1DA1F2 !important;
       color: #fff !important;
@@ -114,3 +111,30 @@
   background: #f1f1f1 !important;
   cursor: not-allowed !important;
 }
+
+
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+  .calendar-day-names div,
+  .calendar-days .calendar-day-item {
+    padding: 8px; 
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .calendar-day-names div,
+  .calendar-days .calendar-day-item {
+    padding: 12px; 
+    font-size: 1rem; 
+  }
+}
+
+@media (min-width: 1025px) {
+  .calendar-day-names div,
+  .calendar-days .calendar-day-item {
+    padding: 15px; 
+    font-size: 1.1rem; 
+  }
+}
+

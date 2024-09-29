@@ -6,79 +6,102 @@
 }
 
 
-/* Global styles for header */
-header {
-  background-color: #1DA1F2; /* Example background color */
-  color: #fff; /* Example text color */
-  // padding: 10px 20px;
-}
 
-/* Title styles */
-.header-title {
-  margin: 0;
-  font-size: 24px; /* Example font size */
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  min-height: 100vh; 
 }
 
 main {
+  flex-grow: 1; /* This makes the main content (form) grow and fill the available space */
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.responsive-form {
   display: flex;
-  justify-content: center;
-  padding-top: 40px;
-}
-
-.arrow {
-  padding: 19px 33px 19px 33px;
-}
-
-.form-field {
-  width: 100%;
+  flex-direction: column;
+    // justify-content: space-between; /* Pushes the footer (buttons) to the bottom */
 }
 
 .date-input {
-  width: 255px;
-}
-
-// .employee-form {
-//   width: 100%;
-//   max-width: 600px;
-//   display: grid;
-//   // grid-template-columns: 1fr;
-//   gap: 0rem;
-// }
-
-.responsive-form {
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-
-.select {
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-
-}
-
-.input-class{
-  padding: 15px;
-  height: 0px !important;
-}
-
-.d-flex {
-  display: flex;
-}
-
-.mat-select-panel {
-  top: unset !important; /* Adjust top positioning as needed */
 }
 
 .footer {
-  border-top: 1px solid #ccc;
-  display: flex;
-  justify-content: end;
-  gap: 20px;
-  padding-top: 20px;
-  height: 50px;
-  overflow: hidden;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }
 
+.disabled {
+  border: none;
+  color: #cccccc;
+  cursor: not-allowed;
+}
+
+.icon_color {
+  color: #1DA1F2 !important;
+}
+
+
+.primary_btn{
+  color: white !important;
+  background-color: #1DA1F2 !important;
+}
+
+.secondary_btn {
+  color: #1DA1F2 !important;
+}
+
+
+/* Media query for small screens (mobile phones) */
+@media (max-width: 600px) {
+  .container {
+      padding: 8px;
+  }
+
+  .header {
+      margin-bottom: 16px;
+  }
+
+  .arrow {
+      display: none;
+  }
+
+  .date-input {
+      width: 100%;
+  }
+
+  .footer {
+      flex-direction: column;
+      gap: 16px;
+  }
+
+  button {
+      width: 100%;
+  }
+}
+
+/* Media query for tablets */
+@media (min-width: 600px) and (max-width: 960px) {
+  .container {
+      padding: 12px;
+  }
+  .footer {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
 

@@ -17,13 +17,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatListModule} from '@angular/material/list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
     EmployeeListComponent,
     EmployeeDetailFormComponent,
     DatePickerComponent
-
+    
   ],
   imports: [
     CommonModule,
@@ -40,7 +41,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatDialogModule,
     MatListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    FlexLayoutModule
   ],
 })
 export class EmployeeModule { }

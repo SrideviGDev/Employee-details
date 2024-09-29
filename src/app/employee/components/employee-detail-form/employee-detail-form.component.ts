@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Employee } from '../../employee-model';
 import { Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePickerComponent } from 'src/app/common/date-picker/date-picker.component';
@@ -20,26 +20,35 @@ export class EmployeeDetailFormComponent implements OnInit{
   employee: any;
   employeeForm: FormGroup;
   layout: string;
-  private breakpointSubscription: Subscription;
   toShowFromCalendar: boolean = false;
   toShowToCalendar: boolean = false;
   selectedDate = null;
-  roles = [{id: 1, name: 'Product Designer'},
+  roles = [
+    {id: 1, name: 'Product Designer'},
     {id: 2, name: 'Flutter Developer'},
     {id: 3, name: 'QA Tester'},
     {id: 4, name: 'Product Owner'}
   ]
 
   constructor(private fb: FormBuilder, private datepipe: DatePipe, private router: Router, 
-    private dbService: NgxIndexedDBService, public dialog: MatDialog, private employeeService: EmployeeService) {
+    private dbService: NgxIndexedDBService, public dialog: MatDialog,
+    private route: ActivatedRoute) {
 
   }
 
   ngOnInit(): void {
-    this.employeeService.employeeDetails$.subscribe((employee) => {
-      this.employee = employee
-    })
-    this.toInitEmployeeForm();
+    let id: any;
+    this.route.paramMap.subscribe(params => {
+      id = params.get('id'); 
+    });
+    if(id) {
+      this.dbService.getAll('employees').subscribe((result: any) => {
+        this.employee = result.find((item:any) => item.id == Number(id));
+        this.toInitEmployeeForm();
+      }); 
+    } else{
+      this.toInitEmployeeForm();
+    }
   }
 
   toInitEmployeeForm() {
@@ -48,10 +57,26 @@ export class EmployeeDetailFormComponent implements OnInit{
       name: [this.employee? this.employee.name : '', Validators.required],
       position: [this.employee? this.employee.position : '', Validators.required],
       fromDate: [this.employee? this.employee.fromDate : '', Validators.required],
-      toDate: [this.employee? this.employee.toDate : null]
+      toDate: [ this.employee? this.employee.toDate : null]
     })
+    const fromDateControl = this.employeeForm.get('fromDate')
+    if(!fromDateControl?.value) {
+      this.employeeForm.get('toDate')?.disable()
+    }
+    this.employeeForm.get('fromDate')?.valueChanges.subscribe(value => {
+      const toDateControl = this.employeeForm.get('toDate');
+      if (value.trim() === '') {
+        toDateControl?.disable()
+      } else {
+        toDateControl?.enable()
+      }
 
-    
+      if(new Date(value) > new Date(toDateControl?.value)) {
+        this.employeeForm.patchValue({
+          toDate: ''
+        })
+      }
+    })
   }
 
   onCancel(): void {
@@ -86,10 +111,16 @@ export class EmployeeDetailFormComponent implements OnInit{
   }
 
   toGetSelectedToDate(date: any | null) {
-    let toDate = this.datepipe.transform(date, 'dd-MMM-yyyy');
-    this.employeeForm.patchValue({
-      toDate: toDate
-    })
+    if (date) {
+      let toDate = this.datepipe.transform(date, 'dd-MMM-yyyy');
+      this.employeeForm.patchValue({
+        toDate: toDate
+      })
+    } else {
+      this.employeeForm.patchValue({
+        toDate: 'No Date'
+      })
+    }
     this.toShowToCalendar = false;
   }
 
@@ -106,12 +137,13 @@ export class EmployeeDetailFormComponent implements OnInit{
   openDatePicker(isFromDate: boolean) {
     const dialogRef = this.dialog.open(DatePickerComponent, {
       // panelClass: 'mat-dialog-container',
-      data: { toDate: isFromDate, calendarVisible: true, minDate: this.employeeForm.get('fromDate')?.value },
+      data: { pickedDate:isFromDate ? this.employeeForm.get('fromDate')?.value : this.employeeForm.get('toDate')?.value, 
+        toDate: isFromDate, calendarVisible: true, minDate: this.employeeForm.get('fromDate')?.value },
     });
 
     dialogRef.afterClosed().subscribe(date => {
       if(isFromDate) {
-        this.toGetSelectedFromDate(date)
+        this.toGetSelectedFromDate(date) 
       } else{
         this.toGetSelectedToDate(date)
       }
@@ -119,8 +151,6 @@ export class EmployeeDetailFormComponent implements OnInit{
   }
 
   ngOnDestroy(): void {
-    if (this.breakpointSubscription) {
-      this.breakpointSubscription.unsubscribe();
-    }
+
   }
 }

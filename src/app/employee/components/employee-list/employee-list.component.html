@@ -1,20 +1,28 @@
-<div class="container">
+<div class="container" fxLayout="column" fxLayoutGap="16px" fxFlexFill>
     <div class="header">
         <span>Employee List</span>
     </div>
-    <div *ngIf="currentEmployees().length" class="card">
-      <div class="card_header">
+    <div *ngIf="currentEmployees().length" class="card" fxLayout="column" fxFlex>
+      <div class="card_header" fxLayout="row" fxLayoutAlign="space-between center">
         <mat-card-title>Current Employees</mat-card-title>
       </div>
-    <mat-list role="list">
+    <mat-list role="list" class="swipe-container">
       <mat-list-item role="listitem" class="list_item" *ngFor="let employee of currentEmployees()">
-        <div class="d-flex" (mousedown)="onMouseDown($event, employee)" (touchstart)="onTouchStart($event, employee)">
-          <div>
+        <div class="swipe-content d-flex"  fxLayout="row" fxLayoutAlign="space-between center"
+        (mousedown)="onMouseDown($event, employee)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp($event)"
+        (touchstart)="onTouchStart($event, employee)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd($event)"
+        #swipeItem
+         >
+         <div fxFlex="80">
             <p class="m-0"><strong>{{ employee['name'] }}</strong></p>
             <p class="emp_role">{{ employee['position'] }}</p>
             <p class="emp_period">From {{ employee['fromDate'] }}</p>
         </div>
-        <button mat-icon-button (click)="editEmployee(employee)">
+        <button mat-icon-button (click)="editEmployee(employee)" >
           <mat-icon theme-color>edit</mat-icon>
         </button>
         </div>
@@ -24,14 +32,22 @@
       </mat-list-item>
     </mat-list>
   </div>
-  <div *ngIf="previousEmployees().length" class="card">
-    <div class="card_header">
+  <div *ngIf="previousEmployees().length" class="card"  fxLayout="column" fxFlex>
+    <div class="card_header"  fxLayout="row" fxLayoutAlign="space-between center">
       <mat-card-title>Previous Employees</mat-card-title>
     </div>
     <mat-list role="list">
       <mat-list-item role="listitem" class="list_item" *ngFor="let employee of previousEmployees()">
-        <div class="d-flex" (mousedown)="onMouseDown($event, employee)" (touchstart)="onTouchStart($event, employee)">
-          <div>
+        <div class="d-flex" fxLayout="row" fxLayoutAlign="space-between center"
+        (mousedown)="onMouseDown($event, employee)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp($event)"
+        (touchstart)="onTouchStart($event, employee)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd($event)"
+        #swipeItem>
+          <!-- (mousedown)="onMouseDown($event, employee)" (touchstart)="onTouchStart($event, employee)" -->
+          <div fxFlex="80">
             <p class="m-0"><strong>{{ employee['name'] }}</strong></p>
             <p class="emp_role">{{ employee['position'] }}</p>
             <p class="emp_period">{{ employee['fromDate'] }} - {{ employee['toDate']}}</p>
@@ -48,10 +64,12 @@
   </div>
 </div>
 
-
+<div class="footer"  fxLayout="row" fxLayoutGap="16px">
+  <span class="delete-info">Swipe left to delete</span>
 <button (click)="toAddNewEmployee()" class="fab_btn" mat-fab>
   <mat-icon class="icon_right">add</mat-icon>
 </button>
+</div>
 
 
 

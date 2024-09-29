@@ -1,45 +1,57 @@
-<div class="container">
+
+<div class="container" fxLayout="column" fxLayoutAlign="start stretch" >
     <div class="header">
         <span>{{employee ? 'Edit' : 'Add'}} Employee</span>
     </div>
-    <main>
-        <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="responsive-form">
-            <div>
-                <mat-form-field class="form-field" appearance="outline">
-                    <mat-icon matPrefix>person</mat-icon>
+    <main fxFlex > 
+        <form *ngIf="employeeForm" [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="responsive-form" fxLayout="column" fxLayoutGap="16px" >
+            <mat-form-field class="form-field" appearance="outline" fxFlex="100">
+                    <mat-icon class="icon_color" matPrefix>person_outline</mat-icon>
                     <input class="input-class" matInput placeholder="Employee Name" formControlName="name" />
+                    <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">
+                        Name is required.
+                    </mat-error>
                 </mat-form-field>
-            </div>
-            <div>
-                <mat-form-field class="form-field" appearance="outline">
-                    <mat-icon matPrefix>work</mat-icon>
+
+                <mat-form-field class="form-field" appearance="outline" fxFlex="100">
+                    <mat-icon class="icon_color" matPrefix>work_outline</mat-icon>
                     <mat-select class="select input-class" formControlName="position" placeholder="Select Role">
                         <mat-option *ngFor="let role of roles" [value]="role.name">{{role.name}}</mat-option>
                     </mat-select>
+                    <mat-error *ngIf="employeeForm.get('position')?.hasError('required')">
+                        Position is required.
+                    </mat-error>
                 </mat-form-field>
-            </div>
-            <div class="d-flex">
-                <div>
-                    <mat-form-field class="date-input" appearance="outline">
-                        <mat-icon matPrefix>today</mat-icon>
-                        <input class="input-class" formControlName="fromDate" matInput placeholder="Today"
-                            (click)="openDatePicker(true)" />
+
+            
+            <div fxLayout="row" fxFlex="100">
+                
+                    <mat-form-field class="date-input" appearance="outline" fxFlex="50">
+                        <mat-icon class="icon_color" matPrefix>today_outline</mat-icon>
+                        <input class="input-class" formControlName="fromDate" matInput placeholder="Today" (click)="openDatePicker(true)" />
+                        <mat-error *ngIf="employeeForm.get('fromDate')?.hasError('required')">
+                            From Date is required.
+                        </mat-error>
                     </mat-form-field>
-                </div>
-                <div>
-                    <mat-icon class="arrow">arrow_right_alt</mat-icon>
-                </div>
-                <div>
-                    <mat-form-field class="date-input" appearance="outline">
-                        <mat-icon matPrefix>today</mat-icon>
+                    
+                    <div fxLayout="column" fxLayoutAlign="center">
+                        <mat-icon class="icon_color arrow">arrow_right_alt</mat-icon>
+                    </div>
+                    
+                    <mat-form-field class="date-input" appearance="outline" fxFlex="50">
+                        <mat-icon class="icon_color" [ngClass]="{'disabled': !employeeForm.get('fromDate')?.value }" matPrefix>today_outline</mat-icon>
                         <input class="input-class" formControlName="toDate" matInput placeholder="No date"
-                            (click)="openDatePicker(false)" />
+                            (click)="employeeForm.get('fromDate')?.value ? openDatePicker(false) : null" />
+                        <mat-error *ngIf="employeeForm.get('toDate')?.hasError('required')">
+                            To Date is required.
+                        </mat-error>
                     </mat-form-field>
-                </div>
+               
             </div>
-            <div class="footer">
-                <button type="submit" [disabled]="!employeeForm.valid" mat-raised-button color="primary">Save</button>
-                <button mat-raised-button>Cancel</button>
+            <div class="footer" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="end">
+                <button mat-raised-button class="secondary_btn" fxFlex="none">Cancel</button>
+                <button type="submit" class="primary_btn" [disabled]="!employeeForm.valid" mat-raised-button color="primary" fxFlex="none">Save</button>
+                
             </div>
         </form>
     </main>

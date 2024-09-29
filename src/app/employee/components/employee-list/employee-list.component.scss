@@ -1,21 +1,10 @@
 
 
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
 
-
-.swipe-item {
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-  }
-   
-  .item-content {
-    flex: 1;
-    padding: 16px;
-    transition: transform 0.3s ease;
-  }
-   
   .delete-button {
     position: absolute;
     top: 0;
@@ -40,11 +29,26 @@
     margin-right: 0px !important;
   }
 
+  .footer{
+    position: fixed; /* Fix the footer at the bottom of the viewport */
+    bottom: 0; /* Align to the bottom */
+    width: 100%; /* Full width */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: space-between; /* Space between elements */
+    align-items: center; /* Center vertically */
+    padding: 16px; /* Add some padding */
+    background-color: #E6E6E6; /* Optional: background color */
+  }
+
+  .delete-info{
+    margin-left: 16px; /* Margin to the left */
+    font-size: 14px; /* Adjust the font size as needed */
+    color: #333; /* Text color */
+  }
+
   .fab_btn {
+    margin-right: 16px;
     background-color: #1DA1F2;
-    position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
   }
 
   .list_item{
@@ -58,6 +62,9 @@
     padding: 15px !important;
     background-color: #E6E6E6 !important;
     color:#1DA1F2;
+    display: flex;
+  justify-content: space-between;
+  align-items: center;
   }
 
   .d-flex {
@@ -79,4 +86,28 @@
 
   .m-0{
     margin: 0px;
+  }
+
+  .swipe-container {
+    position: relative;
+    transition: transform 0.3s ease;  /* Smooth transition back to initial position */
+    user-select: none;  /* Prevent text selection while swiping */
+  }
+
+  @media (max-width: 768px) {
+    /* Adjust flex direction on smaller screens */
+    .swipe-content {
+      flex-direction: column;
+    }
+    
+    .delete-button {
+      display: inline-block;
+    }
+  
+    /* Fab button for small screens */
+    .fab_btn {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+    }
   }
